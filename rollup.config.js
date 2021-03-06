@@ -8,12 +8,12 @@ export default {
     output: [
         {
             name: 'dust',
-            file: './dist/dust.esm.js',
+            file: './lib/dust.esm.js',
             format: 'esm'
         },
         {
             name: 'dust',
-            file: './dist/dust.js',
+            file: './lib/dust.js',
             format: 'umd'
         }
     ],

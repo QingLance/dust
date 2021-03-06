@@ -1,8 +1,9 @@
 {
   "name": "dust-core",
-  "version": "0.0.1-beta1",
+  "version": "0.0.1-beta2",
   "description": "a micro frontend library.",
-  "main": "dist/index.js",
+  "main": "lib/dust.js",
+  "module": "lib/dust.esm.js",
   "scripts": {
     "build": "rollup -c"
   },
@@ -26,5 +27,8 @@
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^7.0.2"
+  },
+  "dependencies": {
+    "single-spa": "^5.9.2"
   }
 }
