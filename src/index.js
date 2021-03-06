@@ -36,14 +36,25 @@ class Dust {
         console.log('mount', opts);
         const { name } = opts;
         return this.createScript(name, entry).then(() => {
-            let domEl = document.getElementById(name);
-            if (!domEl) {
-                domEl = document.createElement('div');
-                domEl.setAttribute('id', name);
-                document.body.appendChild(domEl);
+            // 获取挂载点
+            const parent = document.getElementById(this.apps[name].mountId) || document.body;
+            if (this.apps[name].cache && this.cache[name]) {
+                // 使用缓存
+                if (parent) {
+                    parent.appendChild(this.cache[name]);
+                }
+            } else {
+                let domEl = document.getElementById(name);
+                if (!domEl) {
+                    domEl = document.createElement('div');
+                    domEl.setAttribute('id', name);
+                    if (parent) {
+                        parent.appendChild(domEl);
+                    }
+                }
+                const { render } = this.apps[name];
+                render(name);
             }
-            const { render } = this.apps[name];
-            render(name);
         });
     }
 
@@ -57,20 +68,24 @@ class Dust {
         return Promise.resolve().then(() => {
             const unmount = document.getElementById(name);
             unmount.parentNode.removeChild(unmount);
+            if (this.apps[name].cache) {
+                this.cache[name] = unmount;
+            }
         });
     }
 
     load(entry) {
         return Promise.resolve({
             mount: (opts) => this.mount(opts, entry),
-            bootstrap: this.bootstrap,
-            unmount: this.unmount,
+            bootstrap: (opts) => this.bootstrap(opts),
+            unmount: (opts) => this.unmount(opts),
         });
     }
 
     start(opts) {
-        const { render, name } = opts;
+        const { render, name, cache = false } = opts;
         this.apps[name].render = render;
+        this.apps[name].cache = cache;
     }
 
     boot() {
@@ -85,11 +100,23 @@ class Dust {
         singleSpa.start();
     }
 
-    registerApplication(name, entry) {
+    registerApplication(options) {
+        const { name, entry, active, mountId = '' } = options;
+        if (this.apps[name]) {
+            // 不允许重复注册
+            console.error(`app named '${name}' exsits.`);
+            return;
+        }
         this.apps[name] = {
             name,
             load: () => this.load(entry),
-            active: (location) => location.hash.startsWith(`#${name}`),
+            active: (location) => {
+                if (active) {
+                    return active(location);
+                }
+                return location.hash.startsWith(`#/${name}`);
+            },
+            mountId,
         }
     }
 }

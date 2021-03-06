@@ -1,6 +1,6 @@
 {
   "name": "dust-core",
-  "version": "0.0.1-beta3",
+  "version": "0.0.1-beta4",
   "description": "a micro frontend library.",
   "main": "lib/dust.js",
   "module": "lib/dust.esm.js",
