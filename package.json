@@ -1,6 +1,6 @@
 {
   "name": "dust-core",
-  "version": "0.0.1-beta2",
+  "version": "0.0.1-beta3",
   "description": "a micro frontend library.",
   "main": "lib/dust.js",
   "module": "lib/dust.esm.js",
@@ -8,7 +8,7 @@
     "build": "rollup -c"
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "keywords": [
     "micro"
