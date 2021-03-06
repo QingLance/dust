@@ -25,6 +25,6 @@ export default {
         babel({
             extensions: ['.js'],
         }),
-        // terser()
+        terser()
     ]
 };
